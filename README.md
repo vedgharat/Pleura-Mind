@@ -12,6 +12,14 @@ Try the deployed model:
 
 👉 https://huggingface.co/spaces/vedgharat/pleuramind
 
+## 🤖 Model Weights
+
+The trained model weights are hosted on Hugging Face Model Hub.
+
+👉 https://huggingface.co/vedgharat/pleuramind-model
+
+The application automatically downloads the model during inference using `hf_hub_download`.
+
 ---
 
 # 📌 Overview
