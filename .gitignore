@@ -36,4 +36,5 @@ gradio/
 
 # Build files
 build/
-dist/
+dist/model/best_model.pt
+*.pt # optional: ignore all .pt files
