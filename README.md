@@ -1,23 +1,27 @@
-# 🩺 Chest X-Ray Disease Detection using Deep Learning
+# 🩺 PleuraMind — Chest X-Ray Disease Detection
 
-A deep learning system that detects **8 thoracic diseases** from chest X-ray images using **EfficientNetV2-M** and transfer learning.
+AI-powered chest X-ray disease detection system using **EfficientNetV2-M**, deep learning, and **Grad-CAM explainability**.
 
-The model is trained on the **CheXpert dataset** and uses modern deep learning techniques such as:
+PleuraMind predicts **multiple thoracic diseases from a single chest X-ray image** and provides visual explanations of the model's decision.
 
-- Transfer learning
-- Mixed precision training
-- Class imbalance handling
-- Test-Time Augmentation (TTA)
-- Grad-CAM explainability
+---
+
+# 🚀 Live Demo
+
+Try the deployed model:
+
+👉 https://huggingface.co/spaces/vedgharat/pleuramind
 
 ---
 
 # 📌 Overview
 
 Chest X-ray interpretation is a critical task in medical diagnostics.  
-This project builds a **multi-label classification model** capable of predicting multiple thoracic diseases simultaneously.
+This project builds a **multi-label deep learning model** capable of predicting **8 thoracic conditions simultaneously**.
 
-The system analyzes an X-ray image and outputs probabilities for the following conditions:
+The system analyzes an X-ray image and outputs probabilities for each disease.
+
+### Predicted Diseases
 
 | Disease |
 |------|
@@ -34,18 +38,18 @@ The system analyzes an X-ray image and outputs probabilities for the following c
 
 # 🧠 Model Architecture
 
-The model uses **transfer learning** from EfficientNetV2-M.
+The model uses **transfer learning** from EfficientNetV2-M and a custom classification head.
 
 ### Architecture Components
 
 - Backbone: **EfficientNetV2-M**
 - Pooling: **GeM (Generalized Mean Pooling)**
 - Custom classification head
-- Multi-label sigmoid output
+- Multi-label sigmoid output layer
 
 ---
 
-# ⚙️ Training Details
+# ⚙️ Training Configuration
 
 | Parameter | Value |
 |------|------|
@@ -58,20 +62,21 @@ The model uses **transfer learning** from EfficientNetV2-M.
 | Loss Function | Masked BCEWithLogits |
 | Dataset | CheXpert |
 
-Special techniques used:
+### Training Techniques Used
 
-- **Class imbalance weighting**
-- **Uncertain label handling**
-- **Backbone freezing during warmup**
-- **Fine-tuning after warmup**
+- Transfer learning
+- Mixed precision training
+- Class imbalance handling
+- Uncertain label handling
+- Backbone freezing during warmup
+- Fine-tuning after warmup
+- Test-Time Augmentation (TTA)
 
 ---
 
 # 📊 Model Performance
 
-### Best Validation Macro AUC
-
-### Per-Disease AUC
+### Best Validation Results
 
 | Disease | AUC |
 |------|------|
@@ -115,25 +120,82 @@ Grad-CAM highlights the regions of the X-ray that influenced the model’s predi
 
 ---
 
-# 📄 Output Files
+# 📂 Project Structure
 
-### `validation_predictions.csv`
-
-Contains predicted probabilities and binary predictions for each disease.
-
+```
+PleuraMind
+│
+├── app.py
+├── inference.py
+├── model_definition.py
+├── requirements.txt
+│
+├── results
+│   ├── training_curves.png
+│   ├── roc_curves.png
+│   ├── gradcam_*.png
+│
+├── notebook
+│   └── training_notebook.ipynb
+│
+└── README.md
+```
 
 ---
 
-# 🚀 Running Inference
+# 🚀 Running Locally
 
-Example inference code:
+### 1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/vedgharat/Pleura-Mind.git
+cd Pleura-Mind
+```
+
+### 2️⃣ Create a virtual environment
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3️⃣ Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4️⃣ Run the application
+
+```bash
+python app.py
+```
+
+The interface will open at:
+
+```
+http://127.0.0.1:7860
+```
+
+---
+
+# 🧪 Example Inference
 
 ```python
 import torch
 from PIL import Image
 import torchvision.transforms as T
+from model_definition import CheXpertModel
 
-model = torch.load("model/best_model.pt")
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+model = CheXpertModel(num_classes=8)
+
+checkpoint = torch.load("model/best_model.pt", map_location=DEVICE)
+model.load_state_dict(checkpoint["model_state"])
+
+model.to(DEVICE)
+model.eval()
 
 transform = T.Compose([
     T.Resize((320,320)),
@@ -141,10 +203,52 @@ transform = T.Compose([
 ])
 
 img = Image.open("xray.jpg").convert("RGB")
-img = transform(img).unsqueeze(0)
+img = transform(img).unsqueeze(0).to(DEVICE)
 
 with torch.no_grad():
     logits = model(img)
     probs = torch.sigmoid(logits)
 
 print(probs)
+```
+
+---
+
+# 📁 Output Files
+
+### validation_predictions.csv
+
+Contains predicted probabilities and binary predictions for each disease.
+
+### model_summary.csv
+
+Contains evaluation metrics and training statistics.
+
+---
+
+# ⚠️ Disclaimer
+
+This project is intended for **research and educational purposes only**.
+
+It is **not a medical diagnostic tool** and must not be used for clinical decision-making.
+
+Always consult qualified medical professionals for medical diagnosis.
+
+---
+
+# 📚 Dataset
+
+The model is trained using the **CheXpert Dataset** from Stanford University.
+
+https://stanfordmlgroup.github.io/competitions/chexpert/
+
+---
+
+# 👨‍💻 Author
+
+**Ved Gharat**
+
+Computer Engineering Student  
+Interested in **Deep Learning, AI Systems, and Computer Vision**
+
+GitHub: https://github.com/vedgharat
