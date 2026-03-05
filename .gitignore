@@ -1,0 +1,39 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.env/
+.env.*
+
+# Mac system files
+.DS_Store
+
+# Temporary files
+tmp_input.jpg
+*.tmp
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model checkpoints (too large for GitHub)
+*.pt
+*.pth
+
+# Logs
+*.log
+
+# Dataset folders
+data/
+datasets/
+chexpert/
+
+# Gradio temp files
+gradio/
+
+# Build files
+build/
+dist/
