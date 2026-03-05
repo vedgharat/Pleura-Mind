@@ -1,0 +1,9 @@
+Disease,AUC-ROC,Threshold,Pos_Weight,Train_Count
+Atelectasis,0.7787,0.5103,5.69,33376
+Cardiomegaly,0.8313,0.4182,7.27,27000
+Consolidation,0.9362,0.5723,14.11,14783
+Edema,0.9190,0.5186,3.28,52246
+Pleural Effusion,0.9382,0.3105,1.59,86187
+Pneumonia,0.8388,0.6621,36.00,6039
+Pneumothorax,0.8302,0.4839,10.49,19448
+No Finding,0.9074,0.7358,8.98,22381
